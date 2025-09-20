@@ -33,7 +33,9 @@ app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log("PORT from env:", process.env.PORT);
 });
-
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", port: PORT });
+});
 app.get("/", (req, res) => {
   res.send("🚀 Railway API is live!");
 });
