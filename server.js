@@ -27,6 +27,13 @@ app.use("/api/auth", authRoutes);
 app.get("/", (req, res) => {
   res.send("🚀 Railway API is live!");
 });
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://localhost:${PORT}`);
+});
+rocess.on("uncaughtException", (err) => {
+  console.error("🚨 Uncaught Exception:", err);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("🚨 Unhandled Rejection:", reason);
 });
