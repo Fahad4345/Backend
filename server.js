@@ -24,6 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+console.log("PORT from env:", process.env.PORT);
 app.get("/", (req, res) => {
   res.send("🚀 Railway API is live!");
 });
