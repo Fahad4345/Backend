@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
-rocess.on("uncaughtException", (err) => {
+process.on("uncaughtException", (err) => {
   console.error("🚨 Uncaught Exception:", err);
 });
 
