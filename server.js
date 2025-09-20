@@ -8,7 +8,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cors from "cors";
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 env.config();
 cloudinary.config({
