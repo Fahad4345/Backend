@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
-console.log("PORT from env:", process.env.PORT);
+
 app.get("/", (req, res) => {
   res.send("🚀 Railway API is live!");
 });
@@ -32,6 +32,10 @@ app.get("/", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log("PORT from env:", process.env.PORT);
+});
+
+app.get("/", (req, res) => {
+  res.send("🚀 Railway API is live!");
 });
 process.on("uncaughtException", (err) => {
   console.error("🚨 Uncaught Exception:", err);
