@@ -579,3 +579,21 @@ export const placeOrder = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+export const GetAllOrder = async (req, res) => {
+  try {
+    console.log();
+    const { userId } = req.params;
+    console.log("UserID", userId);
+    const orders = await Order.find({ "customer.userId": userId });
+
+    if (!orders || orders.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No orders found for this customer" });
+    }
+
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

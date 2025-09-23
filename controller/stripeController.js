@@ -62,6 +62,7 @@ export const webhook = async (req, res) => {
     );
     console.log("Try running");
   } catch (err) {
+    console.log(err, "error stripe----");
     return res.status(400).json(`Webhook Error: ${err.message}`);
   }
   console.log("Event", event.type);

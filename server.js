@@ -22,10 +22,9 @@ connectDB();
 
 const app = express();
 app.use(cors({ origin: "*", credentials: true }));
-app.use(express.json());
 app.use(cookieParser());
-
 app.use("/stripe", stripeRoute);
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
