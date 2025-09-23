@@ -42,7 +42,6 @@ router.post("/InsertCart", Protected, InsertCart);
 router.post("/DeleteCart", Protected, DeleteCartItem);
 router.get("/GetCart", Protected, GetCart);
 router.put("/UpdateCart", Protected, UpdateCart);
-router.post("/CheckOut", Protected, CheckoutSession);
 router.post("/PlaceOrder", Protected, placeOrder);
 router.post("/SendEmail", async (req, res) => {
   try {
