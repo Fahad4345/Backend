@@ -8,7 +8,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cors from "cors";
 import Stripe from "stripe";
-import stripeRoute from "../Backend/routes/stripeRoutes.js";
+import stripeRoute from "./routes/stripeRoutes.js";
 
 const PORT = process.env.PORT || 3001;
 
