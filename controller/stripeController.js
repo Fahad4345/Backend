@@ -51,6 +51,10 @@ export const webhook = async (req, res) => {
 
   try {
     console.log("Try running");
+    console.log("Secret", process.env.STRIPE_WEBHOOK_SECRET);
+    console.log("Body", req.body);
+    console.log("Sig", sig);
+
     event = stripe.webhooks.constructEvent(
       req.body,
       sig,
