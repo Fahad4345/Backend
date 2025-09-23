@@ -6,6 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const CreateCheckoutSession = async (req, res) => {
   console.log("session running");
   try {
+    console.log("Try running");
     const { items, customer, paymentMethod } = req.body;
 
     const session = await stripe.checkout.sessions.create({
@@ -22,6 +23,7 @@ export const CreateCheckoutSession = async (req, res) => {
       success_url: `${process.env.FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.FRONTEND_URL}/cancel`,
     });
+    console.log("session  Created");
 
     const neworder = new Order({
       customer,
@@ -31,6 +33,7 @@ export const CreateCheckoutSession = async (req, res) => {
       paymentStatus: "Pending",
       sessionId: session.id,
     });
+    console.log("Order Created");
     try {
       const savedOrder = await neworder.save();
     } catch (error) {
