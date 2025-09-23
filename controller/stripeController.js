@@ -4,6 +4,7 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const CreateCheckoutSession = async (req, res) => {
+  console.log("session running");
   try {
     const { items, customer, paymentMethod } = req.body;
 
@@ -44,6 +45,7 @@ export const CreateCheckoutSession = async (req, res) => {
 };
 
 export const webhook = async (req, res) => {
+  console.log("webhook running");
   const sig = req.headers["stripe-signature"];
   let event;
 
