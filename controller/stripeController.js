@@ -3,7 +3,6 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-
 export const CreateCheckoutSession = async (req, res) => {
   try {
     const { items, customer, paymentMethod } = req.body;
@@ -33,14 +32,12 @@ export const CreateCheckoutSession = async (req, res) => {
     });
     try {
       const savedOrder = await neworder.save();
-    
     } catch (err) {
- 
+      console.error(" Error in saving order:", err);
     }
 
     res.json({ url: session.url });
   } catch (error) {
-    
     res.status(500).json({ error: "Failed to create session" });
   }
 };
@@ -56,7 +53,6 @@ export const webhook = async (req, res) => {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -71,7 +67,6 @@ export const webhook = async (req, res) => {
       );
 
       if (order) {
-        
       } else {
         console.error("❌ Order not found for session:", session.id);
       }
