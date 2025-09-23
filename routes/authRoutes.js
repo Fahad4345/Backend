@@ -19,7 +19,6 @@ import {
   InsertCart,
   GetCart,
   UpdateCart,
-  CheckoutSession,
   DeleteCartItem,
   placeOrder,
 } from "../controller/authController.js";
