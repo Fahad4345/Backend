@@ -55,15 +55,16 @@ export const webhook = async (req, res) => {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
-    console.log("webhook running");
+    console.log("Try running");
   } catch (err) {
     return res.status(400).json(`Webhook Error: ${err.message}`);
   }
-
+  console.log("Event", event.type);
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
 
     try {
+      console.log("Try2 running");
       const order = await Order.findOneAndUpdate(
         { sessionId: session.id },
         { paymentStatus: "Paid", paymentId: session.payment_intent },
