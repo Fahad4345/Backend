@@ -69,6 +69,8 @@ export const webhook = async (req, res) => {
         { new: true }
       );
 
+      console.log("Order", order);
+
       if (order) {
         console.log(
           "✅ Order updated:",
