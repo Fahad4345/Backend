@@ -33,7 +33,7 @@ export const CreateCheckoutSession = async (req, res) => {
     try {
       const savedOrder = await neworder.save();
     } catch (error) {
-      console.error("❌ Stripe session error:", error);
+      console.error("Stripe session error:", error);
       res.status(500).json({ error: error.message });
     }
 
@@ -68,11 +68,17 @@ export const webhook = async (req, res) => {
       );
 
       if (order) {
+        console.log(
+          "✅ Order updated:",
+          order._id,
+          "status:",
+          order.paymentStatus
+        );
       } else {
-        console.error("❌ Order not found for session:", session.id);
+        console.error(" Order not found for session:", session.id);
       }
     } catch (err) {
-      console.error("❌ Webhook DB update error:", err);
+      console.error("Webhook DB update error:", err);
     }
   }
 

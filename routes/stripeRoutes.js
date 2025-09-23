@@ -1,5 +1,5 @@
 import { Router } from "express";
-import express from "express";
+import bodyParser from "body-parser";
 const router = Router();
 import {
   CreateCheckoutSession,
@@ -9,6 +9,6 @@ import {
 
 router.post("/CreateSession", CreateCheckoutSession);
 router.post("/Cancel", cancel);
-router.post("/Webhook", express.raw({ type: "application/json" }), webhook);
+router.post("/Webhook", bodyParser.raw({ type: "application/json" }), webhook);
 
 export default router;
