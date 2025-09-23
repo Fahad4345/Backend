@@ -56,7 +56,7 @@ export const signup = async (req, res) => {
     if (exist) {
       return res.status(401).json({ error: "User Already Exist" });
     }
-   
+
     await user.save();
     await res.status(200).json({ message: "User Created Sucessfully", user });
   } catch (err) {
@@ -88,7 +88,7 @@ export const Login = async (req, res) => {
       email: user.email,
     });
     Refresh_Tokens.add(Refresh_Token);
-    
+
     res.cookie("Refresh_Token", Refresh_Token, { httpOnly: true });
     res.status(200).json({ message: "Login Sucessfull", Access_Token, user });
   } catch (err) {
@@ -142,7 +142,7 @@ export const Protected = async (req, res, next) => {
       return res.status(404).json({ error: "User not found" });
     }
     req.user = user;
-    
+
     next();
   } catch (error) {
     return res.status(400).json({ error: error.message });
@@ -277,7 +277,7 @@ export const InsertItem = async (req, res) => {
 
       Discount,
     } = req.body;
-   
+
     const images =
       req.files && req.files.length > 0
         ? req.files.map((file) => file.path)
@@ -318,7 +318,6 @@ export const GetItem = async (req, res) => {
     } else {
       item = await Item.find();
     }
-    console.log("Item", item);
 
     res.status(201).json({ message: "Item Fetched Sucessfully", item });
   } catch (err) {
@@ -458,10 +457,7 @@ export const InsertCart = async (req, res) => {
     res
       .status(200)
       .json({ message: "Item added to cart", cart: cartWithDetails });
-  
   } catch (err) {
-   
-
     res.status(500).json({ message: err.message });
   }
 };
@@ -508,7 +504,6 @@ export const DeleteCartItem = async (req, res) => {
       .status(200)
       .json({ message: "Item removed from cart", cart: cartWithDetails });
   } catch (err) {
- 
     res.status(500).json({ message: err.message });
   }
 };
@@ -561,41 +556,14 @@ export const UpdateCart = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-export const CheckoutSession = async (req, res) => {
-  try {
-    console.error(process.env.STRIPE_SECRET_KEY);
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: { name: "Test Product" },
-            unit_amount: 2000,
-          },
-          quantity: 1,
-        },
-      ],
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/cancel",
-    });
-
-    res.json({ url: session.url });
-  } catch (err) {
-  
-    res.status(500).json({ error: err.message });
-  }
-};
 
 export const placeOrder = async (req, res) => {
   try {
-   
     const { customer, items, total, paymentMethod, status } = req.body;
     if (!customer || !items || items.length === 0) {
       return res.status(400).json({ message: "Misssing required fields" });
     }
-   
+
     const newOrder = new Order({
       customer,
       items,
