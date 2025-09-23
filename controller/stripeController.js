@@ -33,7 +33,8 @@ export const CreateCheckoutSession = async (req, res) => {
     try {
       const savedOrder = await neworder.save();
     } catch (err) {
-      console.error(" Error in saving order:", err);
+      console.error("❌ Stripe session error:", error);
+      res.status(500).json({ error: error.message });
     }
 
     res.json({ url: session.url });
