@@ -56,7 +56,7 @@ export const signup = async (req, res) => {
     if (exist) {
       return res.status(401).json({ error: "User Already Exist" });
     }
-    console.log(user);
+   
     await user.save();
     await res.status(200).json({ message: "User Created Sucessfully", user });
   } catch (err) {
@@ -88,7 +88,7 @@ export const Login = async (req, res) => {
       email: user.email,
     });
     Refresh_Tokens.add(Refresh_Token);
-    console.log("user", user);
+    
     res.cookie("Refresh_Token", Refresh_Token, { httpOnly: true });
     res.status(200).json({ message: "Login Sucessfull", Access_Token, user });
   } catch (err) {
@@ -142,7 +142,7 @@ export const Protected = async (req, res, next) => {
       return res.status(404).json({ error: "User not found" });
     }
     req.user = user;
-    console.log("Protected running, token:", req.headers.authorization);
+    
     next();
   } catch (error) {
     return res.status(400).json({ error: error.message });
@@ -277,7 +277,7 @@ export const InsertItem = async (req, res) => {
 
       Discount,
     } = req.body;
-    console.log("Insert Running...");
+   
     const images =
       req.files && req.files.length > 0
         ? req.files.map((file) => file.path)
@@ -458,9 +458,9 @@ export const InsertCart = async (req, res) => {
     res
       .status(200)
       .json({ message: "Item added to cart", cart: cartWithDetails });
-    console.log(cartWithDetails);
+  
   } catch (err) {
-    console.error("InsertCart Error:", err);
+   
 
     res.status(500).json({ message: err.message });
   }
@@ -508,7 +508,7 @@ export const DeleteCartItem = async (req, res) => {
       .status(200)
       .json({ message: "Item removed from cart", cart: cartWithDetails });
   } catch (err) {
-    console.error("DeleteCartItem Error:", err);
+ 
     res.status(500).json({ message: err.message });
   }
 };
@@ -583,19 +583,19 @@ export const CheckoutSession = async (req, res) => {
 
     res.json({ url: session.url });
   } catch (err) {
-    console.error(err);
+  
     res.status(500).json({ error: err.message });
   }
 };
 
 export const placeOrder = async (req, res) => {
   try {
-    console.log("Incoming order:", req.body);
+   
     const { customer, items, total, paymentMethod, status } = req.body;
     if (!customer || !items || items.length === 0) {
       return res.status(400).json({ message: "Misssing required fields" });
     }
-    console.log("CustomerId", customer.userId);
+   
     const newOrder = new Order({
       customer,
       items,
