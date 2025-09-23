@@ -2,8 +2,7 @@ import Order from "../model/PlaceOrder.js";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-console.log("stripe", stripe);
-console.log("FRONTEND_URL =>", process.env.FRONTEND_URL);
+
 
 export const CreateCheckoutSession = async (req, res) => {
   try {
@@ -34,15 +33,14 @@ export const CreateCheckoutSession = async (req, res) => {
     });
     try {
       const savedOrder = await neworder.save();
-      console.log("✅ Saved order:", savedOrder);
-      console.log("📂 Collection:", savedOrder.collection.collectionName);
+    
     } catch (err) {
-      console.error("❌ Order save error:", err);
+ 
     }
 
     res.json({ url: session.url });
   } catch (error) {
-    console.error("Stripe session error:", error);
+    
     res.status(500).json({ error: "Failed to create session" });
   }
 };
@@ -58,7 +56,7 @@ export const webhook = async (req, res) => {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    console.error("❌ Webhook signature verification failed:", err.message);
+
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -73,7 +71,7 @@ export const webhook = async (req, res) => {
       );
 
       if (order) {
-        console.log("✅ Order updated:", order._id);
+        
       } else {
         console.error("❌ Order not found for session:", session.id);
       }
