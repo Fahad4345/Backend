@@ -4,6 +4,7 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const CreateCheckoutSession = async (req, res) => {
+  console.log("Stripe key", process.env.STRIPE_SECRET_KEY);
   console.log("session running");
   try {
     console.log("Try running");
