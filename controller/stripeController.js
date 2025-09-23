@@ -50,6 +50,7 @@ export const webhook = async (req, res) => {
   let event;
 
   try {
+    console.log("Try running");
     event = stripe.webhooks.constructEvent(
       req.body,
       sig,
