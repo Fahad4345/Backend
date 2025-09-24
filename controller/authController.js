@@ -13,15 +13,17 @@ import Order from "../model/PlaceOrder.js";
 import { configDotenv } from "dotenv";
 configDotenv();
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 const Refresh_Tokens = new Set();
 function generateAcessToken(user) {
   return jwt.sign(user, ACCESS_SECRET, { expiresIn: "1h" });
 }
-
+const getCookieOptions = () => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // true in production
+  sameSite: "lax",
+});
 function generateRefreshToken(user) {
   return jwt.sign(user, REFRESH_SECRET, { expiresIn: "7d" });
 }
@@ -89,7 +91,8 @@ export const Login = async (req, res) => {
     });
     Refresh_Tokens.add(Refresh_Token);
 
-    res.cookie("Refresh_Token", Refresh_Token, { httpOnly: true });
+    res.cookie("Refresh_Token", Refresh_Token, getCookieOptions());
+
     res.status(200).json({ message: "Login Sucessfull", Access_Token, user });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -197,11 +200,7 @@ export const GoogleLogin = async (req, res) => {
 
     Refresh_Tokens.add(Refresh_Token);
 
-    res.cookie("Refresh_Token", Refresh_Token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+    res.cookie("Refresh_Token", Refresh_Token, getCookieOptions());
 
     res.status(200).json({
       message: "Google login successful",
@@ -221,18 +220,19 @@ export const GoogleLogin = async (req, res) => {
 export const Logout = async (req, res) => {
   try {
     const token = req.cookies.Refresh_Token;
-    console.log(" Token:", token);
+    console.log("Refresh Token:", token);
+
     if (token) {
       Refresh_Tokens.delete(token);
+    } else {
+      console.log("No refresh token found in cookies");
     }
-    res.clearCookie("Refresh_Token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+
+    res.clearCookie("Refresh_Token", getCookieOptions());
 
     return res.status(200).json({ message: "Logout successful" });
   } catch (err) {
+    console.error("Logout error:", err);
     return res.status(500).json({ error: "Failed to logout" });
   }
 };
