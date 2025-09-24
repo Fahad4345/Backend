@@ -7,7 +7,7 @@ import bodyParser from "body-parser";
 import { v2 as cloudinary } from "cloudinary";
 import cors from "cors";
 import stripeRoute from "./routes/stripeRoutes.js";
-import webhook from "./../Backend/controller/stripeController.js";
+import webhook from "./controller/stripeController.js";
 
 const PORT = process.env.PORT || 3001;
 
