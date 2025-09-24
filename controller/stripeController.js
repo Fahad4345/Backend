@@ -46,6 +46,8 @@ export const CreateCheckoutSession = async (req, res) => {
       createdAt: new Date(),
     });
 
+    await newOrder.save();
+
     return res.status(200).json({
       url: session.url,
       sessionId: session.id,
