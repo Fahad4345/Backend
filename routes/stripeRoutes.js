@@ -1,6 +1,5 @@
 import { Router } from "express";
-import bodyParser from "body-parser";
-import { Router } from "express";
+
 const router = Router();
 import {
   CreateCheckoutSession,
