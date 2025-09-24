@@ -9,7 +9,7 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cors from "cors";
 import Stripe from "stripe";
 import stripeRoute from "./routes/stripeRoutes.js";
-
+import webhook from "./controller/stripeController.js";
 const PORT = process.env.PORT || 3001;
 
 env.config();
@@ -25,38 +25,20 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://your-frontend-domain.vercel.app", // Add your actual frontend domain
-      // Add other allowed origins
-    ],
-    credentials: true, // This is crucial for cookies
+    origin: ["http://localhost:3000"],
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-app.use("/stripe", stripeRoute);
+app.use("/stripe", authRoutes, stripeRoute);
 
-app.use("/api/auth", authRoutes);
-app.get("/", (req, res) => {
-  res.send("🚀 Railway API is live!");
-});
+app.use("/api/auth", express.json(), authRoutes);
+
+router.post("/Webhook", bodyParser.raw({ type: "application/json" }), webhook);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log("PORT from env:", process.env.PORT);
-});
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", port: PORT });
-});
-app.get("/", (req, res) => {
-  res.send("🚀 Railway API is live!");
-});
-process.on("uncaughtException", (err) => {
-  console.error("🚨 Uncaught Exception:", err);
-});
-
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("🚨 Unhandled Rejection:", reason);
 });
