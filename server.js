@@ -3,11 +3,9 @@ import env from "dotenv";
 import express from "express";
 import connectDB from "./lib/db.js";
 import cookieParser from "cookie-parser";
-import multer from "multer";
+import bodyParser from "body-parser";
 import { v2 as cloudinary } from "cloudinary";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cors from "cors";
-import Stripe from "stripe";
 import stripeRoute from "./routes/stripeRoutes.js";
 import { webhook } from "./controller/stripeController.js";
 const PORT = process.env.PORT || 3001;
@@ -36,7 +34,7 @@ app.use("/stripe", authRoutes, stripeRoute);
 
 app.use("/api/auth", express.json(), authRoutes);
 
-router.post("/Webhook", bodyParser.raw({ type: "application/json" }), webhook);
+app.use("/Webhook", bodyParser.raw({ type: "application/json" }), webhook);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
