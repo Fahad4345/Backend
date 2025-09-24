@@ -583,7 +583,6 @@ export const placeOrder = async (req, res) => {
 };
 export const GetAllOrder = async (req, res) => {
   try {
-    console.log();
     const { userId } = req.params;
     console.log("UserID", userId);
     const orders = await Order.find({ "customer.userId": userId });
