@@ -9,7 +9,7 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cors from "cors";
 import Stripe from "stripe";
 import stripeRoute from "./routes/stripeRoutes.js";
-import webhook from "./controller/stripeController.js";
+import { webhook } from "./controller/stripeController.js";
 const PORT = process.env.PORT || 3001;
 
 env.config();
