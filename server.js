@@ -19,7 +19,7 @@ cloudinary.config({
 connectDB();
 
 const app = express();
-app.use(express.json());
+
 app.use(cookieParser());
 app.use(
   cors({
@@ -30,7 +30,7 @@ app.use(
   })
 );
 
-app.use("/stripe", authRoutes, stripeRoute);
+app.use("/stripe", express.json(), stripeRoute);
 
 app.use("/api/auth", express.json(), authRoutes);
 
