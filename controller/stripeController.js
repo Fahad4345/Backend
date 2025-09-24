@@ -1,3 +1,6 @@
+import mongoose from "mongoose";
+
+import User from "../model/User.js";
 import Order from "../model/PlaceOrder.js";
 import Stripe from "stripe";
 
@@ -96,6 +99,18 @@ export const webhook = async (req, res) => {
           },
           { new: true }
         );
+        if (order && order.customer?.userId) {
+          const userId = new mongoose.Types.ObjectId(order.customer.userId);
+
+          const result = await User.updateOne(
+            { _id: userId },
+            { $set: { cart: [] } }
+          );
+
+          console.log("🛒 Cart clear result:", result);
+        } else {
+          console.warn("⚠️ No order or userId found for session:", session.id);
+        }
       } catch (err) {
         console.error("Database update error in webhook:", err);
       }
@@ -118,9 +133,6 @@ export const webhook = async (req, res) => {
         console.error("Error updating expired session:", err);
       }
       break;
-
-    default:
-      console.log(`Unhandled event type: ${event.type}`);
   }
 
   res.json({ received: true });
