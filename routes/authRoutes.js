@@ -28,7 +28,7 @@ import { sendEmail } from "../controller/emailController.js";
 router.post("/Signup", signup);
 router.post("/Login", Login);
 router.post("/GoogleLogin", GoogleLogin);
-router.post("/logout", Logout);
+router.post("/Logout", Logout);
 
 router.get("/RefreshToken", RefreshToken);
 router.post("/UpdateProfile", Protected, updateUser);

@@ -96,7 +96,7 @@ export const Login = async (req, res) => {
   }
 };
 export const RefreshToken = (req, res) => {
-  const token = req.cookies.refreshToken;
+  const token = req.cookies.Refresh_Token;
 
   if (!token) return res.status(401).json({ error: "Refresh token missing" });
   if (!Refresh_Tokens.has(token)) {
@@ -193,13 +193,14 @@ export const GoogleLogin = async (req, res) => {
       id: user._id,
       email: user.email,
     });
+    console.log("Referesh Token", Refresh_Token);
 
     Refresh_Tokens.add(Refresh_Token);
 
     res.cookie("Refresh_Token", Refresh_Token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
     });
 
     res.status(200).json({
@@ -219,14 +220,15 @@ export const GoogleLogin = async (req, res) => {
 };
 export const Logout = async (req, res) => {
   try {
-    const token = req.cookies.refreshToken;
+    const token = req.cookies.Refresh_Token;
+    console.log(" Token:", token);
     if (token) {
       Refresh_Tokens.delete(token);
     }
     res.clearCookie("Refresh_Token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
     });
 
     return res.status(200).json({ message: "Logout successful" });

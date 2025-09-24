@@ -21,8 +21,8 @@ cloudinary.config({
 connectDB();
 
 const app = express();
-app.use(cors({ origin: "*", credentials: true }));
 app.use(cookieParser());
+app.use(cors({ origin: "*", credentials: true }));
 app.use("/stripe", stripeRoute);
 
 app.use(express.json());
