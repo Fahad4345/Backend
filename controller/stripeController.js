@@ -209,7 +209,7 @@ export const webhook = async (req, res) => {
   res.json({ received: true });
 };
 
-export const cancelOrder = async (req, res) => {
+export const cancel = async (req, res) => {
   try {
     const { orderId } = req.params;
 
