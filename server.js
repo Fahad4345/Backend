@@ -7,7 +7,8 @@ import bodyParser from "body-parser";
 import { v2 as cloudinary } from "cloudinary";
 import cors from "cors";
 import stripeRoute from "./routes/stripeRoutes.js";
-import { webhook } from "./controller/stripeController.js";
+import webhook from "./controller/stripeController.js";
+
 const PORT = process.env.PORT || 3001;
 
 env.config();
@@ -30,11 +31,10 @@ app.use(
   })
 );
 
+app.post("/Webhook", bodyParser.raw({ type: "application/json" }), webhook);
+
 app.use("/stripe", express.json(), stripeRoute);
-
 app.use("/api/auth", express.json(), authRoutes);
-
-app.use("/Webhook", bodyParser.raw({ type: "application/json" }), webhook);
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
