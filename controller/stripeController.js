@@ -11,7 +11,7 @@ export const CreateCheckoutSession = async (req, res) => {
 
   try {
     const { items, customer, total } = req.body;
-
+    console.log("user", customer, "Id", customer._id);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",

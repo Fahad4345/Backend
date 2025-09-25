@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 import User from "../model/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -561,6 +563,7 @@ export const UpdateCart = async (req, res) => {
 
 export const placeOrder = async (req, res) => {
   try {
+    console.log("Place Order");
     const { customer, items, total, paymentMethod, status } = req.body;
     if (!customer || !items || items.length === 0) {
       return res.status(400).json({ message: "Misssing required fields" });
@@ -574,6 +577,20 @@ export const placeOrder = async (req, res) => {
       status: status || "pending",
     });
     await newOrder.save();
+    console.log(customer, items, total, paymentMethod, status);
+
+    if (newOrder && newOrder.customer?.userId) {
+      const userId = new mongoose.Types.ObjectId(newOrder.customer.userId);
+
+      const result = await User.updateOne(
+        { _id: userId },
+        { $set: { cart: [] } }
+      );
+
+      console.log("🛒 Cart clear result:", result);
+    } else {
+      console.warn("⚠️ No order or userId found for session:", session.id);
+    }
     res
       .status(201)
       .json({ message: "Order placed successfully", order: newOrder });
