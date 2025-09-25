@@ -27,7 +27,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://backend-production-7ad70.up.railway.app",
-      "https://ecommerce-cib7b0pc2-fahad-rehans-projects.vercel.app",
+      "https://ecommerce-mp9ges35z-fahad-rehans-projects.vercel.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
