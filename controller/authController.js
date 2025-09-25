@@ -23,7 +23,7 @@ function generateAcessToken(user) {
 }
 const getCookieOptions = () => ({
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", // true in production
+  secure: process.env.NODE_ENV === "production", 
   sameSite: "lax",
 });
 function generateRefreshToken(user) {
