@@ -4,8 +4,7 @@ import User from "../model/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Item from "../model/Item.js";
-import Wishlist from "./../model/Wishlist.js";
-import dbConnect from "./../lib/db.js";
+
 const ACCESS_SECRET = "mySuperSecretKey12345";
 const REFRESH_SECRET = "myAnotherSecretKey67890";
 import { OAuth2Client } from "google-auth-library";
@@ -23,7 +22,7 @@ function generateAcessToken(user) {
 }
 const getCookieOptions = () => ({
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production", 
+  secure: process.env.NODE_ENV === "production",
   sameSite: "lax",
 });
 function generateRefreshToken(user) {
