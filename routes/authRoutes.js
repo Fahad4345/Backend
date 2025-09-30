@@ -22,6 +22,8 @@ import {
   DeleteCartItem,
   placeOrder,
   GetAllOrder,
+  SendGrid,
+  ResetPassword,
 } from "../controller/authController.js";
 import { sendEmail } from "../controller/emailController.js";
 
@@ -44,6 +46,8 @@ router.get("/GetCart", Protected, GetCart);
 router.put("/UpdateCart", Protected, UpdateCart);
 router.post("/PlaceOrder", Protected, placeOrder);
 router.get("/GetOrder/:userId", Protected, GetAllOrder);
+router.post("/forgetPassword", SendGrid);
+router.post("/resetPassword", ResetPassword);
 router.post("/SendEmail", async (req, res) => {
   try {
     const { to, subject, text } = req.body;

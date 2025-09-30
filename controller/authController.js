@@ -12,6 +12,12 @@ import Stripe from "stripe";
 import Order from "../model/PlaceOrder.js";
 
 import { configDotenv } from "dotenv";
+
+import express from "express";
+import crypto from "crypto";
+import { sendResetEmail } from "../utils/mailer.js";
+
+const router = express.Router();
 configDotenv();
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -614,3 +620,63 @@ export const GetAllOrder = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const SendGrid = async (req, res) => {
+  const { email } = req.body;
+
+  console.log("Forgot Password Request for:", email);
+  if (!email) return res.status(400).json({ message: "Email is required" });
+
+  const user = await User.findOne({ email: email.toLowerCase() });
+
+  const genericMsg = {
+    message: "If that email exists, you will receive reset instructions.",
+  };
+
+  if (!user) return res.json(genericMsg);
+
+  console.log("User found:", user ? user.email : "No user found");
+
+  const token = crypto.randomBytes(32).toString("hex");
+  const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+
+  user.resetPasswordTokenHash = tokenHash;
+  user.resetPasswordExpires = Date.now() + 1000 * 60 * 60;
+  await user.save();
+
+  const resetUrl = `${process.env.FRONTEND_URL}/resetPassword?token=${token}&id=${user._id}`;
+  try {
+    await sendResetEmail(user.email, resetUrl);
+  } catch (err) {
+    console.error("SendGrid error:", err);
+  }
+
+  return res.json(genericMsg);
+};
+
+export const ResetPassword = async (req, res) => {
+  const { id, token, newPassword } = req.body;
+  if (!id || !token || !newPassword)
+    return res.status(400).json({ message: "Missing fields" });
+
+  const user = await User.findById(id);
+  if (!user || !user.resetPasswordTokenHash || !user.resetPasswordExpires)
+    return res.status(400).json({ message: "Invalid or expired token" });
+
+  if (Date.now() > user.resetPasswordExpires)
+    return res.status(400).json({ message: "Token expired" });
+
+  const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+  if (tokenHash !== user.resetPasswordTokenHash)
+    return res.status(400).json({ message: "Invalid token" });
+
+  user.password = newPassword;
+
+  user.resetPasswordTokenHash = undefined;
+  user.resetPasswordExpires = undefined;
+  await user.save();
+
+  return res.json({ message: "Password updated successfully" });
+};
+
+export default router;

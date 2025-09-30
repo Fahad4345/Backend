@@ -22,6 +22,8 @@ const UserSchema = new mongoose.Schema({
   Addresse: { type: String },
   email: { type: String, required: true, unique: true, trim: true },
   password: { type: String, required: true, trim: true },
+  resetPasswordTokenHash: String,
+  resetPasswordExpires: Date,
   cart: [CartItemSchema],
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Item" }],
 });
