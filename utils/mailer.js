@@ -40,3 +40,55 @@ export async function sendResetEmail(to, resetUrl) {
     throw error;
   }
 }
+
+export async function sendContactEmail(to, text) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    to,
+    from: process.env.EMAIL_FROM,
+    subject: "Ecommerce Contact Mail",
+    html: `
+      <p>You have received a new contact form submission.</p>
+      <p><strong>Message:</strong> ${text}</p>
+    `,
+  };
+
+  try {
+    await sgMail.send(msg);
+    console.log("✅ Controller email sent successfully");
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "❌ Controller SendGrid error:",
+      error.response?.body || error
+    );
+    throw error;
+  }
+}
+
+export async function sendSubscribeEmail(email) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    to: email,
+    from: process.env.EMAIL_FROM,
+    subject: " Promo Code",
+    html: `
+      <p>You Promo Code is Y78op0g.</p>
+      <p>Use it at checkout to get a discount!</p>
+    `,
+  };
+
+  try {
+    await sgMail.send(msg);
+    console.log("✅ Controller email sent successfully");
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "❌ Controller SendGrid error:",
+      error.response?.body || error
+    );
+    throw error;
+  }
+}

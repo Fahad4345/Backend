@@ -24,6 +24,8 @@ import {
   GetAllOrder,
   SendGrid,
   ResetPassword,
+  SendContactEmail,
+  SendSubscribeEmail,
 } from "../controller/authController.js";
 import { sendEmail } from "../controller/emailController.js";
 
@@ -48,22 +50,7 @@ router.post("/PlaceOrder", Protected, placeOrder);
 router.get("/GetOrder/:userId", Protected, GetAllOrder);
 router.post("/forgetPassword", SendGrid);
 router.post("/resetPassword", ResetPassword);
-router.post("/SendEmail", async (req, res) => {
-  try {
-    const { to, subject, text } = req.body;
-
-    if (!to || !subject || !text) {
-      return res
-        .status(400)
-        .json({ error: "to, subject, and text are required" });
-    }
-
-    await sendEmail(to, subject, text);
-
-    res.json({ success: true, message: "Email sent successfully" });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to send email" });
-  }
-});
+router.post("/SendEmail", SendContactEmail);
+router.post("/SendSubscribeEmail", SendSubscribeEmail);
 
 export default router;

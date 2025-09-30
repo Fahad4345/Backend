@@ -15,7 +15,11 @@ import { configDotenv } from "dotenv";
 
 import express from "express";
 import crypto from "crypto";
-import { sendResetEmail } from "../utils/mailer.js";
+import {
+  sendResetEmail,
+  sendContactEmail,
+  sendSubscribeEmail,
+} from "../utils/mailer.js";
 
 const router = express.Router();
 configDotenv();
@@ -644,7 +648,7 @@ export const SendGrid = async (req, res) => {
   user.resetPasswordExpires = Date.now() + 1000 * 60 * 60;
   await user.save();
 
-  const resetUrl = `${process.env.FRONTEND_URL}/resetPassword?token=${token}&id=${user._id}`;
+  const resetUrl = `${process.env.DEPLOYED_URL}/resetPassword?token=${token}&id=${user._id}`;
   try {
     await sendResetEmail(user.email, resetUrl);
   } catch (err) {
@@ -677,6 +681,36 @@ export const ResetPassword = async (req, res) => {
   await user.save();
 
   return res.json({ message: "Password updated successfully" });
+};
+export const SendContactEmail = async (req, res) => {
+  try {
+    const { to, text } = req.body;
+
+    if (!to || !text) {
+      return res.status(400).json({ error: "to,  and text are required" });
+    }
+
+    await sendContactEmail(to, text);
+
+    res.json({ success: true, message: "Email sent successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to send email" });
+  }
+};
+export const SendSubscribeEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    await sendSubscribeEmail(email);
+
+    res.json({ success: true, message: "Email sent successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to send email" });
+  }
 };
 
 export default router;
