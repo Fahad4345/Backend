@@ -23,7 +23,7 @@ export async function sendResetEmail(to, resetUrl) {
     subject: "Reset your password",
     html: `
       <p>You requested a password reset. Click the link below to set a new password. This link expires in 1 hour.</p>
-      <p><a href="${resetUrl}" target="_blank">Reset your password</a></p>
+      <a href="${resetUrl}" target="_blank"><button classname=" border-[1px] rounded-[4px] px-[14px] py-[14px] flex justify-center items-center text-white bg-black">Reset your password</button></a>
       <p>If you didn't request this, you can ignore this email.</p>
     `,
   };
