@@ -11,6 +11,8 @@ import {
   RefreshToken,
   updateUser,
   InsertItem,
+  DeleteItem,
+  UpdateItem,
   GetItem,
   InsertWishlist,
   GetWishlist,
@@ -36,7 +38,10 @@ router.post("/Logout", Logout);
 
 router.get("/RefreshToken", RefreshToken);
 router.post("/UpdateProfile", Protected, updateUser);
+
 router.post("/Insert", upload.array("images", 5), InsertItem);
+router.post("/Delete", DeleteItem);
+router.post("/Update/:id", UpdateItem);
 router.get("/GetItem", GetItem);
 router.post("/InsertWishlist", Protected, InsertWishlist);
 router.get("/GetWishlist", Protected, GetWishlist);

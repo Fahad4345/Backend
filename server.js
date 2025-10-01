@@ -39,7 +39,10 @@ app.post("/Webhook", bodyParser.raw({ type: "application/json" }), webhook);
 
 app.use("/stripe", express.json(), stripeRoute);
 app.use("/api/auth", express.json(), authRoutes);
-
+app.use((req, res, next) => {
+  console.log("Incoming:", req.method, req.url);
+  next();
+});
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log("PORT from env:", process.env.PORT);
