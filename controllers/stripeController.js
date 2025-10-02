@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
-
-import User from "../model/User.js";
-import Order from "../model/PlaceOrder.js";
+import User from "../models/User.js";
+import Order from "../models/Order.js";
 import Stripe from "stripe";
-
+import { configDotenv } from "dotenv";
+configDotenv();
+// Ensure Stripe secret key is set
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.log("Stripe secret key is not set.", process.env.STRIPE_SECRET_KEY);
+  throw new Error("STRIPE_SECRET_KEY environment variable is not set.");
+}
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const CreateCheckoutSession = async (req, res) => {

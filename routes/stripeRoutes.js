@@ -1,12 +1,10 @@
 import { Router } from "express";
-
-const router = Router();
 import {
   CreateCheckoutSession,
   cancel,
-  webhook,
-} from "./../controller/stripeController.js";
+} from "./../controllers/stripeController.js";
 
+const router = Router();
 router.post("/CreateSession", CreateCheckoutSession);
 router.post("/CancelOrder/:orderId", cancel);
 

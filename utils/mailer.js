@@ -1,12 +1,6 @@
 import sgMail from "@sendgrid/mail";
 
-console.log(
-  "SendGrid API Key loaded:",
-  process.env.SENDGRID_API_KEY ? "✓ Key exists" : "✗ Key missing"
-);
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-export async function sendResetEmail(to, resetUrl) {
+export async function sendResetPassword(to, resetUrl) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   console.log("Environment check:");
   console.log("- API Key exists:", !!process.env.SENDGRID_API_KEY);

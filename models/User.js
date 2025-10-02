@@ -10,9 +10,7 @@ const CartItemSchema = new mongoose.Schema({
 
   color: { type: String },
   size: { type: String },
-  // review: { type: Number },
-  // rating: { type: Number },
-  // image: { type: String },
+
   quantity: { type: Number, default: 1 },
 });
 

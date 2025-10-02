@@ -1,4 +1,9 @@
 import authRoutes from "./routes/authRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import emailRoutes from "./routes/emailRoutes.js";
+import itemRoutes from "./routes/itemRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+import wishlistRoutes from "./routes/wishlistRoutes.js";
 import env from "dotenv";
 import express from "express";
 import connectDB from "./lib/db.js";
@@ -7,7 +12,7 @@ import bodyParser from "body-parser";
 import { v2 as cloudinary } from "cloudinary";
 import cors from "cors";
 import stripeRoute from "./routes/stripeRoutes.js";
-import { webhook } from "./controller/stripeController.js";
+import { webhook } from "./controllers/stripeController.js";
 
 const PORT = process.env.PORT || 3001;
 
@@ -36,9 +41,15 @@ app.use(
 );
 
 app.post("/Webhook", bodyParser.raw({ type: "application/json" }), webhook);
+app.use(express.json());
 
-app.use("/stripe", express.json(), stripeRoute);
-app.use("/api/auth", express.json(), authRoutes);
+app.use("/stripe", stripeRoute);
+app.use("/auth", authRoutes);
+app.use("/cart", cartRoutes);
+app.use("/email", emailRoutes);
+app.use("/item", itemRoutes);
+app.use("/order", orderRoutes);
+app.use("/wishlist", wishlistRoutes);
 app.use((req, res, next) => {
   console.log("Incoming:", req.method, req.url);
   next();
