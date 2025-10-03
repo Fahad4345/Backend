@@ -17,6 +17,11 @@ const CartItemSchema = new mongoose.Schema({
 const UserSchema = new mongoose.Schema({
   Firstname: { type: String, required: true },
   Lastname: { type: String, required: true },
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
   Addresse: { type: String },
   email: { type: String, required: true, unique: true, trim: true },
   password: { type: String, required: true, trim: true },

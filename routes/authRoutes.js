@@ -7,6 +7,7 @@ import {
   RefreshToken,
   updateUser,
   ResetPassword,
+  GetAllUsers,
 } from "../controllers/authController.js";
 import { Protected } from "../middlewares/protected.js";
 
@@ -18,5 +19,6 @@ router.post("/Logout", Logout);
 router.get("/RefreshToken", RefreshToken);
 router.post("/UpdateProfile", Protected, updateUser);
 router.post("/resetPassword", ResetPassword);
+router.get("/GetAllUsers", GetAllUsers);
 
 export default router;

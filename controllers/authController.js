@@ -15,7 +15,11 @@ const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 const Refresh_Tokens = new Set();
 
 function generateAcessToken(user) {
-  return jwt.sign(user, ACCESS_SECRET, { expiresIn: "1h" });
+  return jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    ACCESS_SECRET,
+    { expiresIn: "1h" }
+  );
 }
 
 const getCookieOptions = () => ({
@@ -25,7 +29,11 @@ const getCookieOptions = () => ({
 });
 
 function generateRefreshToken(user) {
-  return jwt.sign(user, REFRESH_SECRET, { expiresIn: "7d" });
+  return jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    REFRESH_SECRET,
+    { expiresIn: "7d" }
+  );
 }
 
 function isEmail(input) {
@@ -37,7 +45,7 @@ function isPhone(input) {
 }
 
 export const signup = async (req, res) => {
-  let { Firstname, Lastname, Addresse, email, password } = req.body;
+  let { Firstname, Lastname, Addresse, email, password, role } = req.body;
 
   try {
     if (!isEmail(email) && !isPhone(email)) {
@@ -52,6 +60,7 @@ export const signup = async (req, res) => {
     const user = new User({
       Firstname,
       Lastname,
+      role: "user",
       Addresse,
       email,
       password,
@@ -83,14 +92,9 @@ export const Login = async (req, res) => {
       return res.status(500).json({ error: "Invalid Password" });
     }
 
-    const Access_Token = generateAcessToken({
-      id: user._id,
-      email: user.email,
-    });
-    const Refresh_Token = generateRefreshToken({
-      id: user._id,
-      email: user.email,
-    });
+    const Access_Token = generateAcessToken(user);
+    const Refresh_Token = generateRefreshToken(user);
+
     Refresh_Tokens.add(Refresh_Token);
 
     res.cookie("Refresh_Token", Refresh_Token, getCookieOptions());
@@ -112,10 +116,7 @@ export const RefreshToken = (req, res) => {
   jwt.verify(token, REFRESH_SECRET, (err, user) => {
     if (err) return res.status(403).json({ error: "Token expired or invalid" });
 
-    const newAccessToken = generateAcessToken({
-      id: user.id,
-      email: user.email,
-    });
+    const newAccessToken = generateAcessToken(user);
     res.status(200).json({ accessToken: newAccessToken });
   });
 };
@@ -155,15 +156,9 @@ export const GoogleLogin = async (req, res) => {
       await user.save();
     }
 
-    const Access_Token = generateAcessToken({
-      id: user._id,
-      email: user.email,
-    });
+    const Access_Token = generateAcessToken(user);
 
-    const Refresh_Token = generateRefreshToken({
-      id: user._id,
-      email: user.email,
-    });
+    const Refresh_Token = generateRefreshToken(user);
     console.log("Referesh Token", Refresh_Token);
 
     Refresh_Tokens.add(Refresh_Token);
@@ -175,6 +170,7 @@ export const GoogleLogin = async (req, res) => {
       Access_Token,
       user: {
         id: user._id,
+        role: user.role,
         name: user.Firstname,
         email: user.email,
         picture: user.picture,
@@ -258,6 +254,14 @@ export const ResetPassword = async (req, res) => {
   await user.save();
 
   return res.json({ message: "Password updated successfully" });
+};
+export const GetAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve users" });
+  }
 };
 
 export default router;
