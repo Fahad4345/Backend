@@ -263,5 +263,22 @@ export const GetAllUsers = async (req, res) => {
     res.status(500).json({ error: "Failed to retrieve users" });
   }
 };
+export const Deleteuser = async (req, res) => {
+  const { id } = req.body;
+  if (!id) {
+    return res.status(403).json({ message: "Id required" });
+  }
+  try {
+    const user = User.findById(id);
+    if (!user) {
+      return res.status(403).json({ message: "User not found" });
+    }
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    console.error("Delete user error:", error);
+    res.status(500).json({ error: "Failed to delete user" });
+  }
+};
 
 export default router;

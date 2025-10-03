@@ -8,6 +8,7 @@ import {
   updateUser,
   ResetPassword,
   GetAllUsers,
+  Deleteuser,
 } from "../controllers/authController.js";
 import { Protected } from "../middlewares/protected.js";
 
@@ -20,5 +21,6 @@ router.get("/RefreshToken", RefreshToken);
 router.post("/UpdateProfile", Protected, updateUser);
 router.post("/resetPassword", ResetPassword);
 router.get("/GetAllUsers", GetAllUsers);
+router.post("/DeleteUser", Deleteuser);
 
 export default router;
