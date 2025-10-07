@@ -16,6 +16,7 @@ export const CreateCheckoutSession = async (req, res) => {
 
   try {
     const { items, customer, total } = req.body;
+    const userId = customer._id || customer.id;
     console.log("user", customer, "Id", customer._id);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -37,7 +38,7 @@ export const CreateCheckoutSession = async (req, res) => {
 
       metadata: {
         orderId: `temp_${Date.now()}`,
-        customerId: customer.userId || "guest",
+        customerId: userId || "guest",
       },
     });
 
