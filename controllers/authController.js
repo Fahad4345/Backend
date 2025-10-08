@@ -18,14 +18,14 @@ function generateAcessToken(user) {
   return jwt.sign(
     { id: user._id, email: user.email, role: user.role },
     ACCESS_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "1m" }
   );
 }
-
 const getCookieOptions = () => ({
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  secure: process.env.NODE_ENV === "production" ? true : false, // true on Railway
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' for cross-site
+  path: "/", // allow all routes to access
 });
 
 function generateRefreshToken(user) {
@@ -107,16 +107,27 @@ export const Login = async (req, res) => {
 
 export const RefreshToken = (req, res) => {
   const token = req.cookies.Refresh_Token;
+  console.log("refreshToken Called", token);
 
   if (!token) return res.status(401).json({ error: "Refresh token missing" });
   if (!Refresh_Tokens.has(token)) {
     return res.status(403).json({ error: "Invalid refresh token" });
   }
 
-  jwt.verify(token, REFRESH_SECRET, (err, user) => {
+  jwt.verify(token, REFRESH_SECRET, (err, decodedUser) => {
     if (err) return res.status(403).json({ error: "Token expired or invalid" });
 
-    const newAccessToken = generateAcessToken(user);
+    console.log("Decoded refresh token payload:", decodedUser);
+
+    // ✅ Use decodedUser, not 'user'
+    const newAccessToken = jwt.sign(
+      { id: decodedUser.id, email: decodedUser.email, role: decodedUser.role },
+      ACCESS_SECRET,
+      { expiresIn: "1m" }
+    );
+
+    console.log("✅ New Access Token generated successfully");
+
     res.status(200).json({ accessToken: newAccessToken });
   });
 };

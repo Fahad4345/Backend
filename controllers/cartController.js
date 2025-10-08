@@ -4,7 +4,6 @@ import express from "express";
 
 const router = express.Router();
 
-
 export const InsertCart = async (req, res) => {
   try {
     const {
@@ -65,7 +64,6 @@ export const InsertCart = async (req, res) => {
   }
 };
 
-
 export const DeleteCartItem = async (req, res) => {
   try {
     const user = req.user;
@@ -112,10 +110,10 @@ export const DeleteCartItem = async (req, res) => {
   }
 };
 
-
 export const GetCart = async (req, res) => {
   try {
     const userFromToken = req.user;
+    console.log("User", req.user);
     if (!userFromToken) {
       return res.status(400).json({ message: "User is required" });
     }
@@ -131,7 +129,6 @@ export const GetCart = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
 
 export const UpdateCart = async (req, res) => {
   try {
