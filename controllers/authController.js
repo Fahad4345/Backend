@@ -123,7 +123,7 @@ export const RefreshToken = (req, res) => {
     const newAccessToken = jwt.sign(
       { id: decodedUser.id, email: decodedUser.email, role: decodedUser.role },
       ACCESS_SECRET,
-      { expiresIn: "1m" }
+      { expiresIn: "1d" }
     );
 
     console.log("✅ New Access Token generated successfully");
