@@ -100,7 +100,7 @@ export const webhook = async (req, res) => {
           {
             paymentStatus: "Paid",
             paymentId: session.payment_intent,
-            orderStatus: "Confirmed",
+            orderStatus: "Placed",
             updatedAt: new Date(),
           },
           { new: true }

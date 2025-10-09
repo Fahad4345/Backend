@@ -5,7 +5,6 @@ import express from "express";
 
 const router = express.Router();
 
-
 export const placeOrder = async (req, res) => {
   try {
     console.log("Place Order");
@@ -19,7 +18,7 @@ export const placeOrder = async (req, res) => {
       items,
       total,
       paymentMethod,
-      status: status || "pending",
+      status: "pending",
     });
     await newOrder.save();
     console.log(customer, items, total, paymentMethod, status);
@@ -44,7 +43,6 @@ export const placeOrder = async (req, res) => {
   }
 };
 
-
 export const GetAllOrder = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -65,7 +63,7 @@ export const GetAllOrder = async (req, res) => {
 
 export const GetAllOrdersAdmin = async (req, res) => {
   try {
-    const orders = await Order.find().sort({ createdAt: -1 });  
+    const orders = await Order.find().sort({ createdAt: -1 });
     if (!orders || orders.length === 0) {
       return res.status(404).json({ message: "No orders found" });
     }
@@ -74,7 +72,5 @@ export const GetAllOrdersAdmin = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-
 
 export default router;
