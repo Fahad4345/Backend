@@ -107,7 +107,6 @@ export const Login = async (req, res) => {
 
 export const RefreshToken = (req, res) => {
   const token = req.cookies.Refresh_Token;
-  console.log("refreshToken Called", token);
 
   if (!token) return res.status(401).json({ error: "Refresh token missing" });
   if (!Refresh_Tokens.has(token)) {
@@ -117,16 +116,11 @@ export const RefreshToken = (req, res) => {
   jwt.verify(token, REFRESH_SECRET, (err, decodedUser) => {
     if (err) return res.status(403).json({ error: "Token expired or invalid" });
 
-    console.log("Decoded refresh token payload:", decodedUser);
-
-    // ✅ Use decodedUser, not 'user'
     const newAccessToken = jwt.sign(
       { id: decodedUser.id, email: decodedUser.email, role: decodedUser.role },
       ACCESS_SECRET,
       { expiresIn: "1d" }
     );
-
-    console.log("✅ New Access Token generated successfully");
 
     res.status(200).json({ accessToken: newAccessToken });
   });
@@ -170,7 +164,6 @@ export const GoogleLogin = async (req, res) => {
     const Access_Token = generateAcessToken(user);
 
     const Refresh_Token = generateRefreshToken(user);
-    console.log("Referesh Token", Refresh_Token);
 
     Refresh_Tokens.add(Refresh_Token);
 
@@ -196,12 +189,10 @@ export const GoogleLogin = async (req, res) => {
 export const Logout = async (req, res) => {
   try {
     const token = req.cookies.Refresh_Token;
-    console.log("Refresh Token:", token);
 
     if (token) {
       Refresh_Tokens.delete(token);
     } else {
-      console.log("No refresh token found in cookies");
     }
 
     res.clearCookie("Refresh_Token", getCookieOptions());

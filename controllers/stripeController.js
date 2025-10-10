@@ -4,7 +4,7 @@ import Order from "../models/Order.js";
 import Stripe from "stripe";
 import { configDotenv } from "dotenv";
 configDotenv();
-// Ensure Stripe secret key is set
+
 if (!process.env.STRIPE_SECRET_KEY) {
   console.log("Stripe secret key is not set.", process.env.STRIPE_SECRET_KEY);
   throw new Error("STRIPE_SECRET_KEY environment variable is not set.");
@@ -103,7 +103,7 @@ export const webhook = async (req, res) => {
             orderStatus: "Placed",
             updatedAt: new Date(),
           },
-          { new: true }
+          { new: true, runValidators: true }
         );
         if (order && order.customer?.userId) {
           const userId = new mongoose.Types.ObjectId(order.customer.userId);

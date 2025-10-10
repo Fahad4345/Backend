@@ -14,7 +14,7 @@ export const InsertCart = async (req, res) => {
       quantity,
     } = req.body;
     const user = req.user;
-    console.log("Insert Cart Running...");
+   
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -113,7 +113,7 @@ export const DeleteCartItem = async (req, res) => {
 export const GetCart = async (req, res) => {
   try {
     const userFromToken = req.user;
-    console.log("User", req.user);
+    
     if (!userFromToken) {
       return res.status(400).json({ message: "User is required" });
     }

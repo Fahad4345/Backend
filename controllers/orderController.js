@@ -7,7 +7,6 @@ const router = express.Router();
 
 export const placeOrder = async (req, res) => {
   try {
-    console.log("Place Order");
     const { customer, items, total, paymentMethod, status } = req.body;
     if (!customer || !items || items.length === 0) {
       return res.status(400).json({ message: "Misssing required fields" });
