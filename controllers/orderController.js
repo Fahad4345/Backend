@@ -41,6 +41,37 @@ export const placeOrder = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { id, orderStatus } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: "Order ID is required" });
+    }
+
+    if (!orderStatus) {
+      return res.status(400).json({ error: "orderStatus is required" });
+    }
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { orderStatus, updatedAt: new Date() },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    res.status(200).json({
+      message: "Order status updated successfully",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.log(" Error updating order status:", error);
+    res.status(500).json({ error: "Server error updating order status" });
+  }
+};
 
 export const GetAllOrder = async (req, res) => {
   try {
